@@ -1,0 +1,6 @@
+{
+	"id": "test-jeroen",
+	"name": "Jeroen extension test",
+	"src": "./app.html",
+	"fieldTypes": ["Symbol", "Text"]
+}

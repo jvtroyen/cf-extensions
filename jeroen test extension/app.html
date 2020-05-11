@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://contentful.github.io/ui-extensions-sdk/cf-extension.css">
+    <script src="https://unpkg.com/contentful-ui-extensions-sdk@3"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+  </head>
+  <body>
+    <div class="cf-form-field">
+		<input type="text" class="cf-form-input" id="field1">
+		<input type="text" class="cf-form-input" id="field2">
+		<div class="cf-form-hint">
+			Just a test field extension
+		</div>
+	</div>
+    <script>
+	var cfExt = window.contentfulExtension || window.contentfulWidget
+	
+	cfExt.init(function (api) {
+		// Resizes the extension iframe whenever the size of the document changes.
+		api.window.startAutoResizer();
+
+		var input1 = $('#field1');
+		var input2 = $('#field2');
+
+		input1.val('test');
+		input2.val('1, 2, 3');
+
+		const field = api.field;
+		var currentValue = field.getValue();
+		processValue(currentValue);
+		
+		field.onValueChanged(valueChangeHandler);
+		
+		input1.on('blur', function(){ saveFieldValue(); });
+		input2.on('blur', function(){ saveFieldValue(); });
+				
+		function valueChangeHandler(value) {
+			value = value || '';
+
+			if (value !== currentValue) {
+				currentValue = value;
+				processValue(currentValue);
+			}
+		}
+		
+		function processValue(value)
+		{							
+			var parts = value.split("-");
+			if (parts.length > 1)
+			{
+				input1.val(parts[0]);
+				input2.val(parts[1]);
+			}
+		}
+		
+		function saveFieldValue() {
+			var value = input1.val() + '-' + input2.val();
+			field.setValue(value);
+		}
+	})
+    </script>
+  </body>
+</html>
